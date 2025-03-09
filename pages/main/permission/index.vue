@@ -80,13 +80,15 @@
               class="w-full p-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none"
             />
           </div>
-          <div
-            v-for="user in users"
-            :key="user.id"
-            @click="selectUser(user)"
-            class="p-2 hover:bg-gray-600 cursor-pointer text-white"
-          >
-            {{ user.employeeFullName ?? "No Fullname" }} - {{ user.email }}
+          <div class="h-60 overflow-y-auto bg-gray-800 rounded">
+            <div
+              v-for="user in users"
+              :key="user.id"
+              @click="selectUser(user)"
+              class="p-2 hover:bg-gray-600 cursor-pointer text-white"
+            >
+              {{ user.employeeFullName ?? "No Fullname" }} - {{ user.email }}
+            </div>
           </div>
           <div v-if="users.length === 0" class="p-2 text-gray-400 text-center">
             No users found.
@@ -149,7 +151,6 @@
         <thead>
           <tr class="bg-gray-200">
             <th class="border p-2">Menu Name</th>
-            <th class="border p-2">View</th>
             <th class="border p-2">Create</th>
             <th class="border p-2">Update</th>
             <th class="border p-2">Delete</th>
@@ -157,20 +158,21 @@
         </thead>
         <tbody v-if="selectedMenus.length">
           <tr v-for="menu in selectedMenus" :key="menu.id">
-            <td class="border p-2">{{ menu.name }}</td>
-            <td class="border p-2 text-center">
+            <td class="border p-2 flex items-center gap-2">
               <input
                 type="checkbox"
                 class="w-5 h-5"
                 :checked="menu.permissions.includes(4)"
                 @change="togglePermission(menu, 4)"
               />
+              {{ menu.name }}
             </td>
             <td class="border p-2 text-center">
               <input
                 type="checkbox"
                 class="w-5 h-5"
                 :checked="menu.permissions.includes(1)"
+                :disabled="!menu.permissions.includes(4)"
                 @change="togglePermission(menu, 1)"
               />
             </td>
@@ -179,6 +181,7 @@
                 type="checkbox"
                 class="w-5 h-5"
                 :checked="menu.permissions.includes(2)"
+                :disabled="!menu.permissions.includes(4)"
                 @change="togglePermission(menu, 2)"
               />
             </td>
@@ -187,11 +190,13 @@
                 type="checkbox"
                 class="w-5 h-5"
                 :checked="menu.permissions.includes(3)"
+                :disabled="!menu.permissions.includes(4)"
                 @change="togglePermission(menu, 3)"
               />
             </td>
           </tr>
         </tbody>
+
         <tbody v-else>
           <tr>
             <td colspan="5" class="p-5 text-center text-gray-500">
@@ -287,21 +292,32 @@ const addSelectedMenu = () => {
   selectedMenus.value.push({
     id: currentSelection.value.id,
     name: currentSelection.value.name,
-    permissions: [...currentSelection.value.permissions],
+    permissions: [4], // Automatically check "View"
   });
 
-  currentSelection.value =
-    availableMenus.value.length > 0 ? availableMenus.value[0] : null;
+  currentSelection.value = null;
 };
 
+
 const togglePermission = (menu, permissionId) => {
-  const index = menu.permissions.indexOf(permissionId);
-  if (index === -1) {
-    menu.permissions.push(permissionId);
+  if (permissionId === 4) {
+    if (menu.permissions.includes(4)) {
+      menu.permissions = []; // Unchecking "View" removes all permissions
+    } else {
+      menu.permissions.push(4);
+    }
   } else {
-    menu.permissions.splice(index, 1);
+    if (menu.permissions.includes(4)) {
+      const index = menu.permissions.indexOf(permissionId);
+      if (index === -1) {
+        menu.permissions.push(permissionId);
+      } else {
+        menu.permissions.splice(index, 1);
+      }
+    }
   }
 };
+
 
 const savePermissions = async () => {
   const promises = selectedMenus.value.map(async (menu) => {

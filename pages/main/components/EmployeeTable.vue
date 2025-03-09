@@ -198,6 +198,12 @@
                   scope="col"
                   class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
                 >
+                  Created At
+                </th>
+                <th
+                  scope="col"
+                  class="p-5 text-left whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
+                >
                   Status
                 </th>
                 <th
@@ -255,7 +261,17 @@
                 >
                   {{ user.role }}
                 </td>
-
+                <td
+                  class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"
+                >
+                  {{
+                    new Date(user.createdAt).toLocaleDateString("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    })
+                  }}
+                </td>
                 <td
                   class="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"
                 >
@@ -363,10 +379,11 @@
                       height="20"
                     >
                       <path
-                       class="fill-green-600 group-hover:fill-white"
-                      d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                        class="fill-green-600 group-hover:fill-white"
+                        d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                      />
                       <path
-                         class="fill-green-600 group-hover:fill-white"
+                        class="fill-green-600 group-hover:fill-white"
                         fill-rule="evenodd"
                         d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z"
                         clip-rule="evenodd"
@@ -374,6 +391,7 @@
                     </svg>
                   </button>
                   <button
+                    @click="softDelete(user.userId, $swal)"
                     v-if="
                       hasPermission('Users', 'can_delete') || role == 'Admin'
                     "
@@ -394,7 +412,6 @@
                       ></path>
                     </svg>
                   </button>
-                  
                 </td>
                 <td>
                   <div
@@ -668,6 +685,7 @@ import {
   changePage,
   totalPages,
   totalEntries,
+  softDelete,
 } from "~/js/fetchUsersList";
 import { ref } from "vue";
 import { getToken } from "~/js/fetchToken";
@@ -773,7 +791,6 @@ const approveOrRejectUser = async (userId, isApproved) => {
     console.error("Main function error:", error);
   }
 };
-
 
 const isOpen = ref(false);
 const isApprovedOpen = ref(false);

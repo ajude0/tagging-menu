@@ -23,6 +23,7 @@ export const getUsers = async () => {
       params: { ...query.value },
     });
     users.value = response.users;
+    console.log(users.value);
     totalEntries.value = response.totalCount;
     totalPages.value = Math.ceil(response.totalCount / query.value.PageSize);
   } catch (error) {
@@ -83,4 +84,45 @@ export const toggleSort = (field) => {
     query.value.isDescending = false; // Default to ascending order
   }
   getUsers();
+};
+
+export const softDelete = async (userId, $swal) => {
+  console.log("hey");
+  const result = await $swal.fire({
+    title: "Are you sure?",
+    text: "This action cannot be undone!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    cancelButtonText: "Cancel",
+  });
+
+  if (result.isConfirmed) {
+    try {
+      const token = getToken();
+      if (!token) {
+        throw new Error("No token found");
+      }
+      const response = await $fetch(
+        `${API_BASE_URL}/api/employee/delete/${userId}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json", // Specify JSON content type
+          },
+        }
+      );
+
+      getUsers();
+      await $swal.fire({
+        title: "Deleted!",
+        text: "The user has been successfully deleted.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    } catch (error) {
+      console.error("Error deleting menu:", error);
+    }
+  }
 };
