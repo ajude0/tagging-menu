@@ -153,6 +153,7 @@ const login = async () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData.value),
+      credentials: "include",
     });
 
     if (response?.isApproved == 1) {

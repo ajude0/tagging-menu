@@ -100,9 +100,10 @@ function toggleDropdown() {
 function GetRole(){
 
 }
-function Logout() {
-  localStorage.clear();
-  router.push('/')
+async function Logout() {
+    await $fetch(`${API_BASE_URL}/api/account/logout`, { method: "POST", credentials: "include" });
+    localStorage.clear();
+    await router.push('/');
 }
 
 function Dashboard() {

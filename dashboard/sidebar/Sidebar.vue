@@ -16,7 +16,6 @@ defineProps({
 
 onMounted(() => {
   document.addEventListener("click", handleClickOutside);
-  
 });
 
 onBeforeUnmount(() => {
@@ -260,14 +259,12 @@ function Permission() {
                   />
                 </rect>
               </svg>
-              <span
-                v-if="sidebarOpen"
-                class="mx-2 text-sm font-medium"
+              <span v-if="sidebarOpen" class="mx-2 text-sm font-medium"
                 >Dashboard</span
               >
             </a>
             <a
-            v-if="hasMenuAccess('Users') || role == 'Admin'"
+              v-if="hasMenuAccess('Users') || role == 'Admin'"
               @click="users"
               :class="[
                 'cursor-pointer flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:black-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700',
@@ -275,81 +272,34 @@ function Permission() {
               ]"
             >
               <svg
+                class="w-6 h-6"
+                aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
-                width="1.2em"
-                height="1.2em"
+                width="24"
+                height="24"
+                fill="none"
                 viewBox="0 0 24 24"
               >
-                <g
-                  fill="none"
+                <path
                   stroke="currentColor"
                   stroke-linecap="round"
-                  stroke-linejoin="round"
                   stroke-width="2"
-                >
-                  <path
-                    stroke-dasharray="2 4"
-                    stroke-dashoffset="6"
-                    d="M12 21c-4.97 0 -9 -4.03 -9 -9c0 -4.97 4.03 -9 9 -9"
-                  >
-                    <animate
-                      attributeName="stroke-dashoffset"
-                      dur="0.6s"
-                      repeatCount="indefinite"
-                      values="6;0"
-                    />
-                  </path>
-                  <path
-                    stroke-dasharray="32"
-                    stroke-dashoffset="32"
-                    d="M12 3c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9"
-                  >
-                    <animate
-                      fill="freeze"
-                      attributeName="stroke-dashoffset"
-                      begin="0.1s"
-                      dur="0.4s"
-                      values="32;0"
-                    />
-                  </path>
-                  <path
-                    stroke-dasharray="10"
-                    stroke-dashoffset="10"
-                    d="M12 16v-7.5"
-                  >
-                    <animate
-                      fill="freeze"
-                      attributeName="stroke-dashoffset"
-                      begin="0.5s"
-                      dur="0.2s"
-                      values="10;0"
-                    />
-                  </path>
-                  <path
-                    stroke-dasharray="6"
-                    stroke-dashoffset="6"
-                    d="M12 8.5l3.5 3.5M12 8.5l-3.5 3.5"
-                  >
-                    <animate
-                      fill="freeze"
-                      attributeName="stroke-dashoffset"
-                      begin="0.7s"
-                      dur="0.2s"
-                      values="6;0"
-                    />
-                  </path>
-                </g>
+                  d="M16 19h4a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-2m-2.236-4a3 3 0 1 0 0-4M3 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                />
               </svg>
-              <span
-                v-if="sidebarOpen"
-                class="mx-2 text-sm font-medium"
+
+              <span v-if="sidebarOpen" class="mx-2 text-sm font-medium"
                 >User Management</span
               >
             </a>
             <div class="sidebar-dropdown" ref="menu">
               <a
                 href="#"
-                v-if="hasMenuAccess('Menu') ||hasMenuAccess('Permission') || role == 'Admin' "
+                v-if="
+                  hasMenuAccess('Menu') ||
+                  hasMenuAccess('Permission') ||
+                  role == 'Admin'
+                "
                 @click.prevent="toggleOpen"
                 class="cursor-pointer flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:black-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
                 :class="{ '': isActive || open }"
@@ -372,9 +322,7 @@ function Permission() {
                     />
                   </svg>
                 </span>
-                <span
-                  v-if="sidebarOpen"
-                  class="mx-2 text-sm font-medium"
+                <span v-if="sidebarOpen" class="mx-2 text-sm font-medium"
                   >Maintenance</span
                 >
                 <span aria-hidden="true" class="ml-auto">
@@ -404,7 +352,8 @@ function Permission() {
                 role="menu"
                 aria-label="Dropdown Menu"
               >
-                <a v-if="hasMenuAccess('Menu') || role =='Admin'"
+                <a
+                  v-if="hasMenuAccess('Menu') || role == 'Admin'"
                   @click="Menu"
                   :class="[
                     'cursor-pointer flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:black-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700',
@@ -412,19 +361,22 @@ function Permission() {
                   ]"
                 >
                   <svg
+                    class="w-6 h-6"
+                    aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
                     fill="none"
                     viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-5 h-5"
                   >
                     <path
+                      stroke="currentColor"
                       stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"
+                      stroke-width="2"
+                      d="M9 8h10M9 12h10M9 16h10M4.99 8H5m-.02 4h.01m0 4H5"
                     />
                   </svg>
+
                   <span
                     v-if="sidebarOpen || open"
                     class="mx-2 text-sm font-medium"
@@ -432,7 +384,7 @@ function Permission() {
                   >
                 </a>
                 <a
-                v-if="hasMenuAccess('Permission') || role =='Admin'"
+                  v-if="hasMenuAccess('Permission') || role == 'Admin'"
                   @click="Permission"
                   :class="[
                     'cursor-pointer flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:black-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700',
@@ -440,19 +392,22 @@ function Permission() {
                   ]"
                 >
                   <svg
+                    class="w-6 h-6"
+                    aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
                     fill="none"
                     viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-5 h-5"
                   >
                     <path
+                      stroke="currentColor"
                       stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"
+                      stroke-width="2"
+                      d="M20 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6h-2m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4"
                     />
                   </svg>
+
                   <span
                     v-if="sidebarOpen || open"
                     class="mx-2 text-sm font-medium"

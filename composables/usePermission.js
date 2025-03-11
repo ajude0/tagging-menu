@@ -6,7 +6,9 @@ export const usePermissions = () => {
 
   const fetchPermissions = async (userId) => {
     try {
-      const response = await $fetch(`${API_BASE_URL}/get-user-permission/${userId}`);
+      const response = await $fetch(`${API_BASE_URL}/get-user-permission/${userId}`,{
+        credentials: "include",
+      });
       permissions.value = response;
       console.log(permissions.value);
     } catch (error) {

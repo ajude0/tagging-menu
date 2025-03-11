@@ -12,7 +12,7 @@ export const query = ref({
   SortBy: "",
   isDescending: "false",
   PageNumber: 1, // Default to first page
-  PageSize: 5,
+  PageSize: 6,
 });
 export const loadMoreEmployeeList = async () => {
   query.value.PageSize += 5;

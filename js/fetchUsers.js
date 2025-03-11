@@ -8,9 +8,7 @@ export const fetchUser = async () => {
         throw new Error("No token found");
       }
       const data = await $fetch(`${API_BASE_URL}/api/employee/get-my-info`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        credentials: "include",
       });
       employee.value = data;
     } catch (error) {

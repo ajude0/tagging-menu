@@ -80,14 +80,15 @@
               class="w-full p-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none"
             />
           </div>
-          <div class="h-60 overflow-y-auto bg-gray-800 rounded">
+          <div class="h-60 overflow-y-auto bg-gray-800 rounded" ref="userList">
             <div
               v-for="user in users"
               :key="user.id"
               @click="selectUser(user)"
               class="p-2 hover:bg-gray-600 cursor-pointer text-white"
             >
-              {{ user.employeeFullName ?? "No Fullname" }} - {{ user.email }}
+            {{ (user.employeeFullName ?? "No Fullname").toUpperCase() }} - {{ user.email.toUpperCase() }}
+
             </div>
           </div>
           <div v-if="users.length === 0" class="p-2 text-gray-400 text-center">
@@ -98,7 +99,7 @@
             class="border-t border-gray-600"
           >
             <button
-              @click="loadMoreEmployeeList"
+              @click="loadMore"
               class="w-full p-2 bg-gray-700 hover:bg-gray-800 text-white"
             >
               Load More
@@ -222,7 +223,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted,nextTick } from "vue";
 import { API_BASE_URL } from "~/config";
 import {
   getEmployeeList,
@@ -245,6 +246,7 @@ const selectedUserId = ref(""); // Holds the selected user ID
 const selectedUserName = ref("");
 const isDropdownOpen = ref(false);
 const dropdownRef = ref(null);
+const userList = ref(null);
 
 function dashboard() {
   router.push("/main/dashboard");
@@ -258,6 +260,17 @@ const selectUser = (user) => {
   selectedUserName.value = user.employeeFullName ?? user.email;
   isDropdownOpen.value = false;
   fetchUserPermissions();
+};
+const scrollToBottom = () => {
+  if (userList.value) {
+    userList.value.scrollTop = userList.value.scrollHeight;
+  }
+};
+const loadMore = async () => {
+  loadMoreEmployeeList();
+  nextTick(() => {
+          scrollToBottom();
+        });
 };
 const clearSelectedUsername = () => {
   selectedUserName.value = "";
@@ -330,6 +343,7 @@ const savePermissions = async () => {
     try {
       await $fetch(`${API_BASE_URL}/permissions/sync`, {
         method: "POST",
+        credentials: "include",
         body: permissionData,
       });
     } catch (error) {
@@ -356,7 +370,9 @@ const fetchUserPermissions = async () => {
     }
     console.log(selectedUserId.value);
     const response = await $fetch(
-      `${API_BASE_URL}/GetUserMenuPermissions/${selectedUserId.value}`
+      `${API_BASE_URL}/GetUserMenuPermissions/${selectedUserId.value}`,{
+        credentials: "include",
+      }
     );
     console.log("Fetched Permissions:", response);
 

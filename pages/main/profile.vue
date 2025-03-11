@@ -298,9 +298,7 @@ const createUserProfile = async () => {
 
       await $fetch(`${API_BASE_URL}/api/profile`, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        credentials: "include",
         body: formDataObj,
       });
 
